@@ -1,4 +1,4 @@
-#
+# 
 
 library(dplyr)
 
@@ -12,6 +12,10 @@ makeActivityFactor <- function(activityFile)
 makeFeatureFactor <- function(featureFile)
 {
 	features <- read.table(featureFile)
+
+	features$V2 <- gsub(")", "", features$V2, fixed=TRUE)
+	features$V2 <- gsub("(", "", features$V2, fixed=TRUE)
+	features$V2 <- gsub("-", ".", features$V2, fixed=TRUE)
 	featureFactors <- factor(features$V1, labels=features$V2)
 	featureFactors
 }
@@ -84,13 +88,14 @@ runAnalysis <- function()
 	# Merge the training data
 	xTrain <- mergeDataWithSubjectAndActivity(xTrain, subjectTrain, yTrain)
 
-	# Merge test & training data
+	# Merge data
 	mergedData <- mergeDataSets(xTest, xTrain)
+	# Extract desired columns
 	extractedData <- extractMeasurements(mergedData)
-	tidyData <- extractTidy(extractedData)
 
-	# Write the tidy data to a file
-	write.table(tidyData, "tidy.txt", row.name=FALSE)
+	# Boil down dataset to means of each unique observation of a (subject, activity) pair
+	tidyData <- extractTidy(extractedData)
+	tidyData
 }
 
 
