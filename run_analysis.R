@@ -1,4 +1,6 @@
-# 
+# Functions for cleaning the "UCI HAR Dataset". The main function is 
+# `runAnalysis`. Other functions are accessible externally for testing, but not
+# intended to be called by users of this code.
 
 library(dplyr)
 
